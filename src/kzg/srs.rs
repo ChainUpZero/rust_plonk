@@ -110,56 +110,9 @@ impl<E: Pairing> StructuredReferenceString for UnivariateUniversalParams<E> {
         verifier_supported_degree: usize,
     ) -> Result<(Self::ProverParam, Self::VerifierParam), PCSError> {
         /// 如果 prover_supported_degree 大于 self.powers_of_g 的长度，返回一个错误。
-        if self.powers_of_g.len() <= prover_supported_degree {
-            return Err(PCSError::InvalidParameters(ark_std::format!(
-                "Largest supported prover degree by the SRS is: {}, but requested: {}",
-                self.powers_of_g.len() - 1,
-                prover_supported_degree,
-            )));
-        }
         /// 如果 verifier_supported_degree 大于 self.powers_of_h 的长度，返回一个错误。
-        if self.powers_of_h.len() <= verifier_supported_degree {
-            return Err(PCSError::InvalidParameters(ark_std::format!(
-                "Largest supported verifier degree by the SRS is: {}, but requested: {}",
-                self.powers_of_h.len() - 1,
-                verifier_supported_degree,
-            )));
-        }
         /// 如果 verifer_supported_degree 为 0，返回一个错误。
-        /// 很怪 只对verifer有要求
-        if verifier_supported_degree == 0 {
-            return Err(PCSError::InvalidParameters(
-                "Verifier supported degree should be larger than zero".to_string(),
-            ));
-        }
-        /// 创建一个新的 Vec，其中包含 self.powers_of_g 中从第 0 个元素到第 prover_supported_degree 个元素的所有元素。
-        let powers_of_g = self.powers_of_g[..=prover_supported_degree].to_vec();
-
-        let pk = Self::ProverParam { powers_of_g };
-        /// 这里的vk很奇怪，理论上vk = g2^tau
-        let vk = Self::VerifierParam {
-            g: self.powers_of_g[0],
-            h: self.h,
-            beta_h: self.beta_h,
-            powers_of_h: self.powers_of_h[..=verifier_supported_degree].to_vec(),
-            powers_of_g: self.powers_of_g[..=verifier_supported_degree].to_vec(),
-        };
-        /// 在这些函数内部，如果遇到错误条件，它们会立即返回一个Err值，而不是处理错误。
-        /// 因为错误处理通常在函数调用的地方进行。
-        Ok((pk, vk))
-    }
-
-    /// Trim the universal parameters to specialize the public parameters
-    /// for univariate polynomials to the given `supported_degree`, and
-    /// returns committer key and verifier key. `supported_degree` should
-    /// be in range `1..params.len()`
-    /// 如果函数成功执行，它将返回一个元组，其中包含两个参数：Self::ProverParam和Self::VerifierParam。如果函数执行过程中出现错误，它将返回一个PCSError类型的错误。
-    /// 这是给univariate polynomial用的，理论上可以删掉？ 但要改trait的定义
-    fn trim(
-        &self,
-        supported_degree: usize,
-    ) -> Result<(Self::ProverParam, Self::VerifierParam), PCSError> {
-        self.trim_with_verifier_degree(supported_degree, 1)
+        
     }
 
 }
