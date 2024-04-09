@@ -1,7 +1,7 @@
-// use crate::pcs::{PCSError, StructuredReferenceString};
-// use ark_ec::pairing::Pairing;
-// use ark_serialize::{CanonicalDeserialize, CanonicalSerialize};
-// use ark_std::{string::ToString, vec::Vec};
+use crate::pcs::{PCSError, StructuredReferenceString};
+use ark_ec::pairing::Pairing;
+use ark_serialize::{CanonicalDeserialize, CanonicalSerialize};
+use ark_std::{string::ToString, vec::Vec};
 
 #[derive(Debug, Clone, Eq, PartialEq, CanonicalSerialize, CanonicalDeserialize, Default)]
 // 这个结构体包含了 KZG10 方案的通用参数
